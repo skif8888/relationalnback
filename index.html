@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Delay Line — n-back relational reasoning</title>
+<meta name="description" content="Relational reasoning premises with an n-back delay: read a set now, judge its conclusion several screens later.">
+<meta name="theme-color" content="#12101A">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ============================ SETUP ============================ -->
+  <section class="screen is-on" id="screen-menu">
+
+    <header class="masthead">
+      <div class="wordmark">Delay&nbsp;Line</div>
+      <div class="wordmark-sub">n-back relational reasoning</div>
+    </header>
+
+    <div class="hero">
+      <h1 id="hero-line">Read the premises now.<br>Judge them <em>two screens</em> later.</h1>
+      <div class="rail-frame" id="hero-rail" aria-hidden="true"></div>
+      <p class="hero-sub" id="hero-sub"></p>
+    </div>
+
+    <div class="control">
+      <div class="control-head">
+        <h2>Delay</h2>
+        <p>How far back each conclusion reaches.</p>
+      </div>
+      <div class="seg" id="seg-n" role="radiogroup" aria-label="Delay in screens"></div>
+    </div>
+
+    <div class="control">
+      <div class="control-head">
+        <h2>Relations</h2>
+        <p>What the premises talk about. Pick one or mix them.</p>
+      </div>
+      <div class="chips" id="chips-types" role="group" aria-label="Relation types"></div>
+    </div>
+
+    <div class="control">
+      <div class="control-head">
+        <h2>Intensity</h2>
+        <p>Sets everything else — length, scrambling, symbols, clock.</p>
+      </div>
+      <div class="seg" id="seg-preset" role="radiogroup" aria-label="Intensity"></div>
+      <p class="load-line" id="load-line"></p>
+    </div>
+
+    <button class="start" id="btn-start">
+      <span>Start the run</span>
+      <span class="kbd">↵</span>
+    </button>
+
+    <div class="drawers">
+      <details class="drawer" id="drawer-how">
+        <summary><span>How it works</span><i>adapts to your setup</i></summary>
+        <div class="drawer-body" id="how-body"></div>
+      </details>
+
+      <details class="drawer" id="drawer-adv">
+        <summary><span>Fine-tuning</span><i>only if you want it</i></summary>
+        <div class="drawer-body" id="adv-body"></div>
+      </details>
+
+      <details class="drawer" id="drawer-stats">
+        <summary><span>Past runs</span><i id="stats-count"></i></summary>
+        <div class="drawer-body" id="stats-body"></div>
+      </details>
+    </div>
+
+    <footer class="foot">
+      <p>Relation set and scrambling adapted from the relational-reasoning game
+        <a href="https://github.com/4skinSkywalker/Syllogimous-v3" target="_blank" rel="noopener">Syllogimous v3</a>
+        by 4skinSkywalker. The n-back delay, the code and the interface here are original.</p>
+    </footer>
+  </section>
+
+  <!-- ============================ RUN ============================ -->
+  <section class="screen" id="screen-play">
+    <div class="playbar">
+      <div class="playbar-top">
+        <span class="tag" id="phase-label">Screen 1</span>
+        <span class="tally" id="score-label"></span>
+        <button class="ghost" id="btn-quit">End run</button>
+      </div>
+      <div class="rail-frame" id="play-rail" aria-hidden="true"></div>
+      <div class="timerbar" id="timerbar"><i id="timerfill"></i></div>
+    </div>
+
+    <div class="stage">
+      <article class="card card-load" id="card-premises">
+        <div class="card-label">
+          <span id="load-label">Set 01</span>
+          <em id="load-type">Space 2D</em>
+        </div>
+        <ul class="premises" id="premise-list"></ul>
+        <p class="card-note" id="load-note">Hold this set. You will be asked about it later.</p>
+      </article>
+
+      <article class="card card-probe" id="card-probe">
+        <div class="card-label">
+          <span id="probe-label">Conclusion about set 01</span>
+          <em id="probe-type"></em>
+        </div>
+        <p class="conclusion" id="conclusion-text"></p>
+        <div class="answers">
+          <button class="ans ans-true" id="btn-true"><span>True</span><span class="kbd">F</span></button>
+          <button class="ans ans-false" id="btn-false"><span>False</span><span class="kbd">J</span></button>
+        </div>
+        <div class="verdict" id="verdict" aria-live="polite"></div>
+      </article>
+    </div>
+
+    <button class="next" id="btn-next"><span id="next-label">Next set</span><span class="kbd">↵</span></button>
+    <p class="oneway">One way only — there is no going back to a set.</p>
+  </section>
+
+  <!-- ============================ RESULT ============================ -->
+  <section class="screen" id="screen-done">
+    <header class="masthead">
+      <div class="wordmark">Run complete</div>
+      <div class="wordmark-sub" id="done-setup"></div>
+    </header>
+
+    <div class="scoreline">
+      <div class="score-big" id="score-acc">0<i>%</i></div>
+      <ul class="score-side" id="score-side"></ul>
+    </div>
+
+    <div class="rail-frame" id="done-rail" aria-hidden="true"></div>
+
+    <div class="control">
+      <div class="control-head"><h2>Every probe</h2><p>Open one to see the set it came from.</p></div>
+      <ol class="review" id="review-list"></ol>
+    </div>
+
+    <div class="done-actions">
+      <button class="start" id="btn-again"><span>Run it again</span><span class="kbd">↵</span></button>
+      <button class="ghost wide" id="btn-menu">Change the setup</button>
+    </div>
+  </section>
+
+</div>
+
+<script src="assets/js/rrt.js"></script>
+<script src="assets/js/fmt.js"></script>
+<script src="assets/js/settings.js"></script>
+<script src="assets/js/rail.js"></script>
+<script src="assets/js/howitworks.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+Delay Line
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+
+You are free to share and adapt this material, including for your own projects,
+provided you give appropriate credit and do not use it for commercial purposes.
+
+Full terms:
+  Summary   https://creativecommons.org/licenses/by-nc/4.0/
+  Legal code https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+
+ATTRIBUTION
+
+This project adapts the relation set, the scrambling ideas and the phrasing
+conventions of Syllogimous v3 by 4skinSkywalker
+(https://github.com/4skinSkywalker/Syllogimous-v3), which is released under
+CC BY-NC 3.0. The non-commercial term is carried over from that work.
+
+The n-back delay mechanic, the interface, and all source code in this
+repository were written independently for this project.
+
+If you later decide the code here is separable from the upstream work, you are
+of course free to relicense your own contributions.
